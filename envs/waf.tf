@@ -78,6 +78,17 @@ resource "oci_waf_web_app_firewall_policy" "waf_flb" {
       type = "DYNAMIC"
     }
   }
+  ### Custom
+  actions {
+    code = 503
+    name = "Custom-configured-503-sorry-page"
+    type = "RETURN_HTTP_RESPONSE"
+    body {
+      template = null
+      text     = file("${path.module}/config/sorry_page.html")
+      type     = "STATIC_TEXT"
+    }
+  }
   #### Access control
   ### Request access rules
   request_access_control {
