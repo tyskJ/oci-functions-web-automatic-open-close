@@ -1,4 +1,4 @@
-WAF固定レスポンス追加用Functionsデプロイ
+WAF Request Access Rule Default Action を 固定レスポンス に変更するFunctionsデプロイ
 =====================================================================
 .. note::
 

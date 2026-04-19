@@ -173,11 +173,11 @@ OCI WAF ポリシーの運用管理環境を整備してみた
 
 6. 手動デプロイ
 ---------------------------------------------------------------------
-6-1. WAF固定レスポンス削除用Functionsデプロイ
+6-1. WAF Request Access Rule Default Action を Allow に変更するFunctionsデプロイ
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 * `Functions <./deploy_waf_open_functions.rst>`_
 
-6-2. WAF固定レスポンス追加用Functionsデプロイ
+6-2. WAF Request Access Rule Default Action を 固定レスポンス に変更するFunctionsデプロイ
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 * `Functions <./deploy_waf_close_functions.rst>`_
 
