@@ -31,3 +31,27 @@ locals {
     }
   }
 }
+
+/************************************************************
+Functions
+************************************************************/
+locals {
+  apps = {
+    waf_open = {
+      name    = "waf-open"
+      fn_ocid = var.fn_open_ocid
+    }
+    waf_close = {
+      name    = "waf-close"
+      fn_ocid = var.fn_close_ocid
+    }
+    com_start = {
+      name    = "compute-start"
+      fn_ocid = var.fn_start_ocid
+    }
+    com_stop = {
+      name    = "compute-stop"
+      fn_ocid = var.fn_stop_ocid
+    }
+  }
+}
