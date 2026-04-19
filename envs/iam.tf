@@ -25,3 +25,19 @@ resource "local_sensitive_file" "auth_token" {
   filename = "./.key/work_user_auth_token.txt"
   content  = oci_identity_auth_token.this.token
 }
+
+/************************************************************
+IAM Policy - For Functions
+************************************************************/
+resource "oci_identity_policy" "functions_waf_policy" {
+  compartment_id = var.tenancy_ocid
+  description    = "OCI Functions Policy for Regional WAF Policy"
+  name           = "functions-regional-waf-policy"
+  statements = [
+    format(
+      "allow dynamic-group %s to use waf-policy in compartment %s",
+      oci_identity_dynamic_group.functions.name,
+      oci_identity_compartment.workload.name
+    )
+  ]
+}
