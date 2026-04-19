@@ -34,3 +34,8 @@ variable "fn_subscriptions" {
   type    = bool
   default = false
 }
+
+variable "fn_schedules" {
+  type    = bool
+  default = false
+}

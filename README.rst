@@ -150,6 +150,7 @@ OCI WAF ポリシーの運用管理環境を整備してみた
   fn_start_ocid = ""
   fn_stop_ocid = ""
   fn_subscriptions = false
+  fn_schedules = false
   EOF
 
 3. *Terraform* 初期化
@@ -193,7 +194,8 @@ OCI WAF ポリシーの運用管理環境を整備してみた
 .. note::
 
   * 項番6でデプロイしたFunctionsの各OCIDを、 ``oci.auto.tfvars`` 内の ``fn_*_ocid`` に追記
-  * ``oci.auto.tfvars`` 内の ``fn_subscriptions`` を ``true`` に変更し以下コマンドを実行
+  * ``oci.auto.tfvars`` 内の ``fn_subscriptions`` を ``true`` に変更
+  * ``oci.auto.tfvars`` 内の ``fn_schedules`` を ``true`` に変更し以下コマンドを実行
 
 .. code-block:: bash
 
