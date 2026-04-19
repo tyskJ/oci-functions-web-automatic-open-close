@@ -71,4 +71,12 @@ locals {
       name = "fn-compute-stop-topic"
     }
   }
+  fn_subscriptions = {
+    waf_open = {
+      fn_ocid = var.fn_open_ocid
+    }
+    com_stop = {
+      fn_ocid = var.fn_stop_ocid
+    }
+  }
 }

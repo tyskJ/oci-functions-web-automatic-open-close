@@ -29,3 +29,8 @@ variable "fn_start_ocid" {
 variable "fn_stop_ocid" {
   type = string
 }
+
+variable "fn_subscriptions" {
+  type    = bool
+  default = false
+}

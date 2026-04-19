@@ -149,6 +149,7 @@ OCI WAF ポリシーの運用管理環境を整備してみた
   fn_close_ocid = ""
   fn_start_ocid = ""
   fn_stop_ocid = ""
+  fn_subscriptions = false
   EOF
 
 3. *Terraform* 初期化
