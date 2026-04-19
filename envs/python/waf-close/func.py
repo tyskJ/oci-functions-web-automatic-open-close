@@ -14,7 +14,7 @@ EntryPoint
 """
 def handler(ctx, data: io.BytesIO = None):
     logger = logging.getLogger()
-    logger.info("LogAnalytics Storage Purge Started")
+    logger.info("WAF Default Actions Change Started")
     """1. Resource Principal Signer"""
     try:
         signer = oci.auth.signers.get_resource_principals_signer()
@@ -60,7 +60,7 @@ def handler(ctx, data: io.BytesIO = None):
     except Exception as e:
         logger.error(f"Unexpected error during get waf policy id: {e}")
         return error_response(ctx, str(e), 500)
-    """4. 固定レスポンス設定"""
+    """4. Default Actions設定"""
     try:
         before_waf_policy_details = waf_client.get_web_app_firewall_policy(
             web_app_firewall_policy_id=waf_policy_id
