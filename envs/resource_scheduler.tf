@@ -1,6 +1,7 @@
 /************************************************************
 Schedules
 ************************************************************/
+### For Functions
 resource "oci_resource_scheduler_schedule" "functions" {
   count = var.fn_schedules ? 1 : 0
 
@@ -15,3 +16,5 @@ resource "oci_resource_scheduler_schedule" "functions" {
   recurrence_details = "FREQ=DAILY;INTERVAL=1"
   recurrence_type    = "ICAL"
 }
+
+### For Compute 

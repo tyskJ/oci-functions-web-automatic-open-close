@@ -15,11 +15,20 @@ resource "local_sensitive_file" "private_key_oracle" {
 /************************************************************
 Compute (Oracle Linux)
 ************************************************************/
+resource "time_sleep" "wait_tag" {
+  depends_on = [
+    oci_identity_tag_namespace.compute,
+    oci_identity_tag.key_compute_system
+  ]
+  create_duration = "60s"
+}
+
 ##### Instance
 resource "oci_core_instance" "oracle_instance" {
   depends_on = [
     oci_core_route_table_attachment.attachment_system,
-    oci_core_network_security_group_security_rule.sg_oracle_egress_all
+    oci_core_network_security_group_security_rule.sg_oracle_egress_all,
+    time_sleep.wait_tag
   ]
   display_name        = "oracle-instance"
   compartment_id      = oci_identity_compartment.workload.id
@@ -136,6 +145,9 @@ resource "oci_core_instance" "oracle_instance" {
   metadata = {
     ssh_authorized_keys = tls_private_key.ssh_keygen_oracle.public_key_openssh
     user_data           = base64encode(file("./userdata/oraclelinux_init.sh"))
+  }
+  defined_tags = {
+    format("%s.%s", oci_identity_tag_namespace.compute.name, oci_identity_tag.key_compute_system.name) = "web",
   }
   lifecycle {
     ignore_changes = [metadata]
