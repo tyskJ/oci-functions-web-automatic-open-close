@@ -55,3 +55,20 @@ locals {
     }
   }
 }
+
+/************************************************************
+Notifications
+************************************************************/
+locals {
+  topics = {
+    email = {
+      name = "email-topic"
+    }
+    waf_open = {
+      name = "fn-waf-open-topic"
+    }
+    com_stop = {
+      name = "fn-compute-stop-topic"
+    }
+  }
+}
