@@ -7,3 +7,27 @@ locals {
     r.key => r.name
   }
 }
+
+/************************************************************
+Repository
+************************************************************/
+locals {
+  repos = {
+    waf_open = {
+      prefix_name = "waf_open_mngt"
+      fn_name     = "waf-open"
+    }
+    waf_close = {
+      prefix_name = "waf_close_mngt"
+      fn_name     = "waf-close"
+    }
+    com_start = {
+      prefix_name = "com_start_mngt"
+      fn_name     = "compute-start"
+    }
+    com_stop = {
+      prefix_name = "com_stop_mngt"
+      fn_name     = "compute-stop"
+    }
+  }
+}
