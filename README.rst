@@ -172,14 +172,28 @@ OCI WAF ポリシーの運用管理環境を整備してみた
 
 6. 手動デプロイ
 ---------------------------------------------------------------------
-* `Functions <./deploy_functions.rst>`_
+6-1. WAF固定レスポンス削除用Functionsデプロイ
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+* `Functions <./deploy_waf_open_functions.rst>`_
+
+6-2. WAF固定レスポンス追加用Functionsデプロイ
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+* `Functions <./deploy_waf_close_functions.rst>`_
+
+6-3. Compute Instance起動用Functionsデプロイ
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+* `Functions <./deploy_com_start_functions.rst>`_
+
+6-4. Compute Instance停止用Functionsデプロイ
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+* `Functions <./deploy_com_stop_functions.rst>`_
 
 7. Subscription デプロイ
 ---------------------------------------------------------------------
 .. note::
 
-  * ``notifications.tf`` 内の `oci_ons_subscription.*` リソースコメントアウトを解除
-  * 項番6でデプロイしたFunctionsの各OCIDを、 ``oci.auto.tfvars`` 内の ``fn_*_ocid`` に追記し、以下コマンド実行
+  * 項番6でデプロイしたFunctionsの各OCIDを、 ``oci.auto.tfvars`` 内の ``fn_*_ocid`` に追記
+  * ``oci.auto.tfvars`` 内の ``fn_subscriptions`` を ``true`` に変更し以下コマンドを実行
 
 .. code-block:: bash
 
