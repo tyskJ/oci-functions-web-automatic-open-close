@@ -5,6 +5,7 @@ Regional WAF の Request Access Rules の Default Actions を Allow Action に�
 import io
 import json
 import logging
+import os
 import oci
 
 from fdk import response
@@ -15,6 +16,16 @@ EntryPoint
 def handler(ctx, data: io.BytesIO = None):
     logger = logging.getLogger()
     logger.info("WAF Default Actions Change Started")
+    """0. 環境変数チェック"""
+    compartment_name = os.getenv("COMPARTMENT_NAME")
+    waf_policy_name = os.getenv("WAF_POLICY_NAME")
+    default_action_name = os.getenv("DEFAULT_ACTION_NAME")
+    if not compartment_name:
+        return error_response(ctx, "COMPARTMENT_NAME environment variable is not set")
+    if not waf_policy_name:
+        return error_response(ctx, "WAF_POLICY_NAME environment variable is not set")
+    if not default_action_name:
+        return error_response(ctx, "DEFAULT_ACTION_NAME environment variable is not set")
     """1. Resource Principal Signer"""
     try:
         signer = oci.auth.signers.get_resource_principals_signer()
@@ -43,12 +54,12 @@ def handler(ctx, data: io.BytesIO = None):
             compartment_id=tenancy_id,
             compartment_id_in_subtree=True,
             lifecycle_state="ACTIVE",
-            name="oci-functions-web-automatic-open-close"
+            name=compartment_name
         )
         compartment_id = resp.data[0].id
         resp = waf_client.list_web_app_firewall_policies(
             compartment_id=compartment_id,
-            display_name="regional-waf-policy"
+            display_name=waf_policy_name
         )
         waf_policy_id = resp.data.items[0].id
     except oci.exceptions.ServiceError as e:
@@ -65,7 +76,7 @@ def handler(ctx, data: io.BytesIO = None):
         before_waf_policy_details = waf_client.get_web_app_firewall_policy(
             web_app_firewall_policy_id=waf_policy_id
         ).data
-        if before_waf_policy_details.request_access_control.default_action_name == "Pre-configured Allow Action":
+        if before_waf_policy_details.request_access_control.default_action_name == default_action_name:
             return success_response(
                 ctx,
                 {
@@ -76,7 +87,7 @@ def handler(ctx, data: io.BytesIO = None):
         else:
             update_waf_policy_details = oci.waf.models.UpdateWebAppFirewallPolicyDetails(
                 request_access_control=oci.waf.models.RequestAccessControl(
-                    default_action_name="Pre-configured Allow Action",
+                    default_action_name=default_action_name,
                     rules=before_waf_policy_details.request_access_control.rules
                 )
             )

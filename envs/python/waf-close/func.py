@@ -26,7 +26,6 @@ def handler(ctx, data: io.BytesIO = None):
         return error_response(ctx, "WAF_POLICY_NAME environment variable is not set")
     if not default_action_name:
         return error_response(ctx, "DEFAULT_ACTION_NAME environment variable is not set")
-
     """1. Resource Principal Signer"""
     try:
         signer = oci.auth.signers.get_resource_principals_signer()
