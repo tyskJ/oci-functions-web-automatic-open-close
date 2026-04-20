@@ -352,6 +352,43 @@ OCI WAF ポリシーの運用管理環境を整備してみた
 
 8-4. Compute Instance停止用Functions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. code-block:: bash
+  
+  COMPARTMENT_NAME="oci-functions-web-automatic-open-close"
+  COMPARTMENT_ID=$(oci iam compartment list \
+    --lifecycle-state ACTIVE \
+    --profile ADMIN \
+    --auth security_token \
+    --query "data[?name=='${COMPARTMENT_NAME}'].id | [0]" \
+    --raw-output)
+
+.. code-block:: bash
+
+  EMAIL_TOPIC_ID=$(oci ons topic list \
+  --compartment-id "${COMPARTMENT_ID}" \
+  --all \
+  --name "email-topic" \
+  --query "data[0].\"topic-id\"" \
+  --raw-output \
+  --profile ADMIN \
+  --auth security_token)
+
+.. code-block:: bash
+
+  FN_OCID="fn_stop_ocid"
+  oci fn function update \
+  --function-id "${FN_OCID}" \
+  --failure-destination '{
+      "kind": "NOTIFICATION",
+      "topicId": "'"${EMAIL_TOPIC_ID}"'"
+    }' \
+  --success-destination '{
+      "kind": "NOTIFICATION",
+      "topicId": "'"${EMAIL_TOPIC_ID}"'"
+    }' \
+  --force \
+  --profile ADMIN \
+  --auth security_token
 
 後片付け - ローカル -
 =====================================================================
