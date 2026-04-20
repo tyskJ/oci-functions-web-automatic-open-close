@@ -78,7 +78,7 @@ def handler(ctx, data: io.BytesIO = None):
             return success_response(
                 ctx,
                 {
-                    "message": "Instance Already Not Stopped."
+                    "message": "Instance Already Running."
                 },
                 202
             )
