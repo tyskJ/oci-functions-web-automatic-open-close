@@ -41,3 +41,21 @@ resource "oci_identity_policy" "functions_waf_policy" {
     )
   ]
 }
+
+resource "oci_identity_policy" "functions_compute" {
+  compartment_id = var.tenancy_ocid
+  description    = "OCI Functions Policy for Compute Instance"
+  name           = "functions-compute-instance-policy"
+  statements = [
+    format(
+      "allow dynamic-group %s to read instances in compartment %s",
+      oci_identity_dynamic_group.functions.name,
+      oci_identity_compartment.workload.name
+    ),
+    format(
+      "allow dynamic-group %s to {INSTANCE_POWER_ACTIONS} in compartment %s",
+      oci_identity_dynamic_group.functions.name,
+      oci_identity_compartment.workload.name
+    )
+  ]
+}
