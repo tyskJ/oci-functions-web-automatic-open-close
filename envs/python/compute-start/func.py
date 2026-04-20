@@ -100,6 +100,13 @@ def handler(ctx, data: io.BytesIO = None):
                 action="START"
             )
             logger.info(f"Finished Start Instace: {instance_id}")
+        return success_response(
+            ctx,
+            {
+                "message": "Success Start Instances."
+            },
+            202
+        )
     except oci.exceptions.ServiceError as e:
         logger.error(
             "Update Compute Instance State failed: "
