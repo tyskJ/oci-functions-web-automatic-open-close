@@ -6,3 +6,10 @@ build_image: fnproject/python:3.11-dev
 run_image: fnproject/python:3.11
 entrypoint: /python/bin/fdk /function/func.py handler
 memory: 256
+timeout: 30
+config:
+  COMPARTMENT_NAME: "oci-functions-web-automatic-open-close"
+  INSTANCE_STATE: "STOPPED"
+  TAG_NAMESPACE: "Compute"
+  DEFINED_TAG_KEY: "App"
+  DEFINED_TAG_VALUE: "web"
