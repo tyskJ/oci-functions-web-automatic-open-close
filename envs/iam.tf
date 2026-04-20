@@ -13,13 +13,28 @@ resource "oci_identity_dynamic_group" "functions" {
   )
 }
 
-
+/************************************************************
+Dynamic Group - Resource Scheduler
+************************************************************/
 resource "oci_identity_dynamic_group" "scheduler" {
   compartment_id = var.tenancy_ocid
   name           = "Scheduler_Dynamic_Group"
   description    = "Scheduler Dynamic Group"
   matching_rule = format(
     "All {resource.type = 'resourceschedule', resource.compartment.id = '%s'}",
+    oci_identity_compartment.workload.id
+  )
+}
+
+/************************************************************
+Dynamic Group - Functions Application
+************************************************************/
+resource "oci_identity_dynamic_group" "fn_app" {
+  compartment_id = var.tenancy_ocid
+  name           = "Functions_Application_Dynamic_Group"
+  description    = "Functions Application Dynamic Group"
+  matching_rule = format(
+    "All {resource.type = 'fnapp', resource.compartment.id = '%s'}",
     oci_identity_compartment.workload.id
   )
 }
@@ -92,6 +107,22 @@ resource "oci_identity_policy" "scheduler_functions" {
     format(
       "allow dynamic-group %s to use fn-invocation in compartment %s",
       oci_identity_dynamic_group.scheduler.name,
+      oci_identity_compartment.workload.name
+    )
+  ]
+}
+
+/************************************************************
+IAM Policy - For Functions Application
+************************************************************/
+resource "oci_identity_policy" "fn_app_notifications" {
+  compartment_id = var.tenancy_ocid
+  description    = "OCI Functions Application Policy for Notifications"
+  name           = "functions-application-notifications-policy"
+  statements = [
+    format(
+      "allow dynamic-group %s to use ons-topics in compartment %s",
+      oci_identity_dynamic_group.fn_app.name,
       oci_identity_compartment.workload.name
     )
   ]
