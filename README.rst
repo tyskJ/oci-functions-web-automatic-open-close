@@ -201,6 +201,59 @@ OCI WAF ポリシーの運用管理環境を整備してみた
 
   terraform apply --auto-approve
 
+8. Functions Success and Failure Destination 追加
+---------------------------------------------------------------------
+.. note::
+
+  * Functions OCID は適宜変更してください
+
+8-1. WAF Request Access Rule Default Action を Allow に変更するFunctions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. code-block:: bash
+  
+  COMPARTMENT_NAME="oci-functions-web-automatic-open-close"
+  COMPARTMENT_ID=$(oci iam compartment list \
+    --lifecycle-state ACTIVE \
+    --profile ADMIN \
+    --auth security_token \
+    --query "data[?name=='${COMPARTMENT_NAME}'].id | [0]" \
+    --raw-output)
+
+.. code-block:: bash
+
+  EMAIL_TOPIC_ID=$(oci ons topic list \
+  --compartment-id "${COMPARTMENT_ID}" \
+  --all \
+  --name "email-topic" \
+  --query "data[0].\"topic-id\"" \
+  --raw-output \
+  --profile ADMIN \
+  --auth security_token)
+
+.. code-block:: bash
+
+  FN_OCID="fn_open_ocid"
+  oci fn function update \
+  --function-id "${FN_OCID}" \
+  --failure-destination '{
+      "kind": "NOTIFICATION",
+      "topicId": "'"${EMAIL_TOPIC_ID}"'"
+    }' \
+  --success-destination '{
+      "kind": "NOTIFICATION",
+      "topicId": "'"${EMAIL_TOPIC_ID}"'"
+    }' \
+  --force \
+  --profile ADMIN \
+  --auth security_token
+
+8-2. WAF Request Access Rule Default Action を 固定レスポンス に変更するFunctions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+8-3. Compute Instance起動用Functions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+8-4. Compute Instance停止用Functions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 後片付け - ローカル -
 =====================================================================
 1. 環境削除
