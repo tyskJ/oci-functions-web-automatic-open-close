@@ -13,6 +13,17 @@ resource "oci_identity_dynamic_group" "functions" {
   )
 }
 
+
+resource "oci_identity_dynamic_group" "scheduler" {
+  compartment_id = var.tenancy_ocid
+  name           = "Scheduler_Dynamic_Group"
+  description    = "Scheduler Dynamic Group"
+  matching_rule = format(
+    "All {resource.type = 'resourceschedule', resource.compartment.id = '%s'}",
+    oci_identity_compartment.workload.id
+  )
+}
+
 /************************************************************
 Auth Token
 ************************************************************/
@@ -55,6 +66,32 @@ resource "oci_identity_policy" "functions_compute" {
     format(
       "allow dynamic-group %s to {INSTANCE_POWER_ACTIONS} in compartment %s",
       oci_identity_dynamic_group.functions.name,
+      oci_identity_compartment.workload.name
+    )
+  ]
+}
+
+/************************************************************
+IAM Policy - For Resource Scheduler
+************************************************************/
+resource "oci_identity_policy" "scheduler_functions" {
+  compartment_id = var.tenancy_ocid
+  description    = "OCI Resource Scheduler Policy for Functions"
+  name           = "resource-scheduler-functions-policy"
+  statements = [
+    format(
+      "allow dynamic-group %s to read fn-app in compartment %s",
+      oci_identity_dynamic_group.scheduler.name,
+      oci_identity_compartment.workload.name
+    ),
+    format(
+      "allow dynamic-group %s to read fn-function in compartment %s",
+      oci_identity_dynamic_group.scheduler.name,
+      oci_identity_compartment.workload.name
+    ),
+    format(
+      "allow dynamic-group %s to use fn-invocation in compartment %s",
+      oci_identity_dynamic_group.scheduler.name,
       oci_identity_compartment.workload.name
     )
   ]
